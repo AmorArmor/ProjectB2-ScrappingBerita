@@ -1,10 +1,3 @@
-"""
-Modul 2 — scraper.py
-────────────────────
-Bertanggung-jawab atas semua aktivitas HTTP dan parsing HTML.
-Dijalankan di dalam QThread (ScraperWorker) agar GUI tidak freeze.
-"""
-
 import re
 import time
 import requests
@@ -14,10 +7,6 @@ from bs4 import BeautifulSoup
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
-
-# ──────────────────────────────────────────────────────────────
-#  KONSTANTA
-# ──────────────────────────────────────────────────────────────
 
 HEADERS = {
     "User-Agent": (
@@ -54,13 +43,7 @@ LINK_FILTERS = [
     r'#', r'javascript:', r'mailto:',
 ]
 
-
-# ──────────────────────────────────────────────────────────────
-#  HELPER FUNCTIONS
-# ──────────────────────────────────────────────────────────────
-
 def _is_article_link(href: str, base_domain: str) -> bool:
-    """Filter apakah URL kemungkinan merupakan link artikel."""
     if not href or len(href) < 10:
         return False
     for pattern in LINK_FILTERS:
@@ -75,7 +58,6 @@ def _is_article_link(href: str, base_domain: str) -> bool:
 
 
 def _extract_links(soup: BeautifulSoup, base_url: str) -> set:
-    """Kumpulkan semua link artikel valid dari halaman."""
     base_domain = urlparse(base_url).netloc
     links = set()
     for a in soup.find_all('a', href=True):
@@ -87,7 +69,6 @@ def _extract_links(soup: BeautifulSoup, base_url: str) -> set:
 
 
 def _find_next_page(soup: BeautifulSoup, current_url: str):
-    """Deteksi URL halaman pagination berikutnya."""
     patterns = [
         'a[rel="next"]', 'a.next', 'a.next-page', 'a.pagination-next',
         'li.next a', '.pagination a[aria-label*="Next"]',
@@ -160,19 +141,11 @@ def _extract_content(soup: BeautifulSoup) -> str:
     return text[:5000] if text else '(Konten tidak ditemukan)'
 
 
-# ──────────────────────────────────────────────────────────────
-#  QTHREAD WORKER
-# ──────────────────────────────────────────────────────────────
-
 class ScraperWorker(QThread):
-    """
-    Worker thread yang menjalankan proses scraping di background.
-    Berkomunikasi ke GUI melalui pyqtSignal.
-    """
-    article_found    = pyqtSignal(dict)   # satu artikel selesai
-    progress_updated = pyqtSignal(int, int)  # (current, total)
+    article_found    = pyqtSignal(dict)   
+    progress_updated = pyqtSignal(int, int)  
     log_message      = pyqtSignal(str)
-    finished_signal  = pyqtSignal(int)    # total scraped
+    finished_signal  = pyqtSignal(int)    
     error_signal     = pyqtSignal(str)
 
     def __init__(self, url: str, max_articles: int = 50):
@@ -198,7 +171,6 @@ class ScraperWorker(QThread):
     def run(self):
         self.log_message.emit(f"🔍 Mulai scraping: {self.start_url}")
 
-        # ── Fase 1: kumpulkan link artikel ──
         all_links   = set()
         current_page = self.start_url
         page_num     = 1
@@ -241,7 +213,6 @@ class ScraperWorker(QThread):
             )
             return
 
-        # ── Fase 2: scrape tiap artikel ──
         scraped = 0
         for i, url in enumerate(article_links):
             if not self._running:
