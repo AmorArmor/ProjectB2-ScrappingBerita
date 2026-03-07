@@ -80,7 +80,7 @@ class AppController:
         """
         Terima artikel mentah dari scraper →
         bersihkan via cleaner →
-        kirim ke GUI.
+        kirim ke gui.
         """
         clean = clean_article(raw_article)
         self.articles.append(clean)

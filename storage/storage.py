@@ -19,7 +19,7 @@ from datetime import datetime
 #  KONSTANTA
 # ──────────────────────────────────────────────────────────────
 
-# Kolom CSV sesuai urutan tampilan di tabel GUI
+# Kolom CSV sesuai urutan tampilan di tabel gui
 CSV_FIELDNAMES = ['no', 'title', 'date', 'snippet', 'url']
 
 # Header yang ramah dibaca manusia (baris pertama CSV)
