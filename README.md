@@ -24,7 +24,9 @@ pip install requests beautifulsoup4 PyQt5
 ## 🚀 Cara Penggunaan
 1. Buka terminal di dalam folder proyek ini.
 2. Jalankan aplikasi dengan perintah:
+   ```
       python main.py
+   ```
 3. Masukkan URL Target: Ketik atau paste tautan halaman indeks berita atau kategori (contoh: https://www.detik.com/tag/teknologi atau https://tekno.kompas.com).
 4. Tentukan Batas Maksimal: Atur jumlah maksimal artikel yang ingin diambil pada kolom angka (misal: 30 artikel).
 5. Mulai Scraping: Klik tombol ▶ Mulai Scraping. Kamu bisa melihat progres dan log aktivitas di panel bagian bawah.
